@@ -1,0 +1,31 @@
+{
+  "name": "iampersistent/ledger",
+  "type": "library",
+  "description": "A ledger of financial transactions",
+  "keywords": ["ledger"],
+  "license": "MIT",
+  "require": {
+    "moneyphp/money": "^3.0@dev",
+    "php": ">=7.2",
+    "psr/container": "^1.0@dev",
+    "league/omnipay": "^3"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.4"
+  },
+  "repositories": {
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "IamPersistent\\Ledger\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\Fixture\\": "tests/_support/Fixture",
+      "Tests\\Functional\\": "tests/functional",
+      "Tests\\Unit\\": "tests/unit"
+    }
+  }
+}
