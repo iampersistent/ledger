@@ -10,7 +10,7 @@ final class Ledger
     /** @var Money */
     private $balance;
     /** @var Entry[] */
-    private $entries;
+    private $entries = [];
     /** @var int */
     private $id;
 
@@ -26,6 +26,21 @@ final class Ledger
         return $this;
     }
 
+    public function addEntry(Entry $entry): Ledger
+    {
+        if (null === $line = $entry->getLine()) {
+            $line = count($this->entries) + 1;
+            $entry->setLine($line);
+        }
+
+        $this->entries[$line] = $entry;
+
+        return $this;
+    }
+
+    /**
+     * @return Entry[]
+     */
     public function getEntries(): array
     {
         return $this->entries;
@@ -33,7 +48,10 @@ final class Ledger
 
     public function setEntries(array $entries): Ledger
     {
-        $this->entries = $entries;
+        $this->entries = [];
+        foreach ($entries as $entry) {
+            $this->addEntry($entry);
+        }
 
         return $this;
     }
