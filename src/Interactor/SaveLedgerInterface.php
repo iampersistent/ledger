@@ -7,5 +7,5 @@ use IamPersistent\Ledger\Entity\Ledger;
 
 interface SaveLedgerInterface
 {
-    public function saveLedger(Ledger $ledger): bool;
+    public function save(Ledger $ledger): bool;
 }

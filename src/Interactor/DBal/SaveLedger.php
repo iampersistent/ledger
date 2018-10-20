@@ -6,8 +6,9 @@ namespace IamPersistent\Ledger\Interactor\DBal;
 use Doctrine\DBAL\Connection;
 use IamPersistent\Ledger\Entity\Ledger;
 use IamPersistent\Ledger\Interactor\CalculateBalance;
+use IamPersistent\Ledger\Interactor\SaveLedgerInterface;
 
-final class SaveLedger
+final class SaveLedger implements SaveLedgerInterface
 {
     /** @var Connection */
     private $connection;
@@ -23,7 +24,7 @@ final class SaveLedger
         $this->insertEntry = new InsertLedgerEntry($connection);
     }
 
-    public function save(Ledger $ledger)
+    public function save(Ledger $ledger): bool
     {
         if (null === $ledger->getId()) {
             $this->insertLedger($ledger);
@@ -40,6 +41,8 @@ final class SaveLedger
 
         (new CalculateBalance)->handle($ledger);
         $this->updateLedger($ledger);
+
+        return true;
     }
 
     private function insertLedger(Ledger $ledger)
@@ -79,4 +82,5 @@ final class SaveLedger
 
         }
     }
+
 }
