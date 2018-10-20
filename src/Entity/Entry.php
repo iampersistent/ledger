@@ -11,6 +11,8 @@ abstract class Entry
     protected $date;
     /** @var string */
     protected $description;
+    /** @var mixed */
+    protected $id;
     /** @var int */
     protected $line;
     /** @var string */
@@ -36,6 +38,18 @@ abstract class Entry
     public function setDescription(string $description): Entry
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id): Entry
+    {
+        $this->id = $id;
 
         return $this;
     }

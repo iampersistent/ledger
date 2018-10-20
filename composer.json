@@ -7,11 +7,14 @@
   "require": {
     "moneyphp/money": "^3.0@dev",
     "php": ">=7.2",
-    "psr/container": "^1.0@dev",
-    "league/omnipay": "^3"
+    "psr/container": "^1.0@dev"
   },
   "require-dev": {
-    "codeception/codeception": "^2.4"
+    "codeception/codeception": "^2.4",
+    "doctrine/dbal": "^2.9@dev",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "robmorgan/phinx": "dev-master"
   },
   "repositories": {
   },

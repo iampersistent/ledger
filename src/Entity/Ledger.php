@@ -11,7 +11,7 @@ final class Ledger
     private $balance;
     /** @var Entry[] */
     private $entries = [];
-    /** @var int */
+    /** @var mixed */
     private $id;
 
     public function getBalance(): Money
@@ -56,12 +56,12 @@ final class Ledger
         return $this;
     }
 
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function setId(int $id): Ledger
+    public function setId($id): Ledger
     {
         $this->id = $id;
 
