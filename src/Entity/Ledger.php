@@ -46,6 +46,17 @@ final class Ledger
         return $this->entries;
     }
 
+    public function getEntryByReferenceNumber(string $referenceNumber): ?Entry
+    {
+        foreach ($this->entries as $entry) {
+            if ($referenceNumber === $entry->getReferenceNumber()) {
+                return $entry;
+            }
+        }
+
+        return null;
+    }
+
     public function setEntries(array $entries): Ledger
     {
         $this->entries = [];
