@@ -48,7 +48,7 @@ final class SaveLedger implements SaveLedgerInterface
     private function insertLedger(Ledger $ledger)
     {
         $data = [
-            'balance' => json_encode($ledger->getBalance()),
+            'balance' => (new MoneyToJson)($ledger->getBalance()),
         ];
         $response = $this->connection->insert('ledgers', $data);
         if (1 === $response) {

@@ -21,9 +21,9 @@ final class InsertLedgerEntry
         $credit = null;
         $debit = null;
         if ($entry->isCredit()) {
-            $credit = json_encode($entry->getCredit());
+            $credit = (new MoneyToJson)($entry->getCredit());
         } else {
-            $debit = json_encode($entry->getDebit());
+            $debit = (new MoneyToJson)($entry->getDebit());
         }
         $data = [
             'credit'           => $credit,
