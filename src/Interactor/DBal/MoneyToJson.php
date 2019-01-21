@@ -7,7 +7,7 @@ use Money\Money;
 
 final class MoneyToJson
 {
-    public function __invoke(Money $money): Money
+    public function __invoke(Money $money): string
     {
         $json = [
             'amount'   => (int)$money->getAmount(),
