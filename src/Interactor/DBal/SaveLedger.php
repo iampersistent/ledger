@@ -72,7 +72,7 @@ final class SaveLedger implements SaveLedgerInterface
     private function updateLedger(Ledger $ledger)
     {
         $data = [
-            'balance' => json_encode($ledger->getBalance()),
+            'balance' => (new MoneyToJson)($ledger->getBalance()),
         ];
         $identifier = [
             'id' => (int) $ledger->getId(),
