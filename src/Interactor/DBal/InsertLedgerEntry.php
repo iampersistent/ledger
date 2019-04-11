@@ -33,6 +33,7 @@ final class InsertLedgerEntry
             'line'             => $entry->getLine(),
             'ledger_id'        => $ledger->getId(),
             'reference_number' => $entry->getReferenceNumber(),
+            'type'             => $entry->getType(),
         ];
         $response = $this->connection->insert('ledger_entries', $data);
         if (1 === $response) {

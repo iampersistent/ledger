@@ -59,7 +59,8 @@ final class FindLedgerById
             ->setDescription($data['description'])
             ->setId($data['id'])
             ->setLine((int) $data['line'])
-            ->setReferenceNumber($data['reference_number']);
+            ->setReferenceNumber($data['reference_number'])
+            ->setType($data['type']);
 
         return $entry;
     }

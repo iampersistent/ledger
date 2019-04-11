@@ -17,6 +17,8 @@ abstract class Entry
     protected $line;
     /** @var string */
     protected $referenceNumber;
+    /** @var string */
+    protected $type;
 
     public function getDate(): DateTime
     {
@@ -74,6 +76,18 @@ abstract class Entry
     public function setReferenceNumber(string $referenceNumber): Entry
     {
         $this->referenceNumber = $referenceNumber;
+
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): Entry
+    {
+        $this->type = $type;
 
         return $this;
     }
