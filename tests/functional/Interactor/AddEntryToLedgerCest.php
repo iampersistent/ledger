@@ -25,6 +25,7 @@ class AddEntryToLedgerCest
         $addEntryToLedger->handle($ledger, $entry);
 
         $I->assertEquals(Money::USD(1000), $ledger->getBalance());
+        $I->assertEquals(Money::USD(1000), $entry->getRunningBalance());
         $I->assertContains($entry, $ledger->getEntries());
 
         $entry = (new Debit())
@@ -33,6 +34,7 @@ class AddEntryToLedgerCest
         $addEntryToLedger->handle($ledger, $entry);
 
         $I->assertEquals(Money::USD(0), $ledger->getBalance());
+        $I->assertEquals(Money::USD(0), $entry->getRunningBalance());
         $I->assertContains($entry, $ledger->getEntries());
     }
 }

@@ -76,7 +76,7 @@ final class SaveLedgerCest
     {
         return [
             [
-                'credit'           => '{"amount":"1000","currency":"USD"}',
+                'credit'           => '{"amount":1000,"currency":"USD"}',
                 'debit'            => null,
                 'date'             => '2018-10-19',
                 'description'      => 'Initial deposit',
@@ -84,16 +84,20 @@ final class SaveLedgerCest
                 'line'             => '1',
                 'ledger_id'        => '2',
                 'reference_number' => '8675309',
+                'running_balance'  => null,
+                'type'             => null,
             ],
             [
                 'credit'           => null,
-                'debit'            => '{"amount":"500","currency":"USD"}',
+                'debit'            => '{"amount":500,"currency":"USD"}',
                 'date'             => '2018-10-20',
                 'description'      => 'Toothpicks',
                 'id'               => '2',
                 'line'             => '2',
                 'ledger_id'        => '2',
                 'reference_number' => '828282',
+                'running_balance'  => null,
+                'type'             => null,
             ],
         ];
     }
@@ -102,7 +106,7 @@ final class SaveLedgerCest
     {
         return [
             [
-                'balance' => '{"amount":"0","currency":"USD"}',
+                'balance' => '{"amount":0,"currency":"USD"}',
                 'id'      => '1',
             ],
         ];
@@ -112,11 +116,11 @@ final class SaveLedgerCest
     {
         return [
             [
-                'balance' => '{"amount":"0","currency":"USD"}',
+                'balance' => '{"amount":0,"currency":"USD"}',
                 'id'      => '1',
             ],
             [
-                'balance' => '{"amount":"1000","currency":"USD"}',
+                'balance' => '{"amount":1000,"currency":"USD"}',
                 'id'      => '2',
             ],
         ];
@@ -126,11 +130,11 @@ final class SaveLedgerCest
     {
         return [
             [
-                'balance' => '{"amount":"0","currency":"USD"}',
+                'balance' => '{"amount":0,"currency":"USD"}',
                 'id'      => '1',
             ],
             [
-                'balance' => '{"amount":"500","currency":"USD"}',
+                'balance' => '{"amount":500,"currency":"USD"}',
                 'id'      => '2',
             ],
         ];

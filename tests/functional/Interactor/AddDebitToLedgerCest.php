@@ -25,6 +25,7 @@ class AddDebitToLedgerCest
         $I->assertEquals(Money::USD(-1999), $ledger->getBalance());
         $I->assertCount(1, $ledger->getEntries());
         $I->assertSame(1, $debit1->getLine(), 'The line should have been set');
+        $I->assertEquals(Money::USD(-1999), $debit1->getRunningBalance());
 
         $debit2 = (new Debit())
             ->setDebit(Money::USD(1000));
@@ -33,5 +34,6 @@ class AddDebitToLedgerCest
         $I->assertEquals(Money::USD(-2999), $ledger->getBalance());
         $I->assertCount(2, $ledger->getEntries());
         $I->assertSame(2, $debit2->getLine(), 'The line should have been set to the bottom');
+        $I->assertEquals(Money::USD(-2999), $debit2->getRunningBalance());
     }
 }

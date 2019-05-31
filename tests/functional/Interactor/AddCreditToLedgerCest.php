@@ -25,6 +25,7 @@ class AddCreditToLedgerCest
         $I->assertEquals(Money::USD(1999), $ledger->getBalance());
         $I->assertCount(1, $ledger->getEntries());
         $I->assertSame(1, $credit1->getLine(), 'The line should have been set');
+        $I->assertEquals(Money::USD(1999), $credit1->getRunningBalance());
 
         $credit2 = (new Credit())
             ->setCredit(Money::USD(1000));
@@ -33,5 +34,6 @@ class AddCreditToLedgerCest
         $I->assertEquals(Money::USD(2999), $ledger->getBalance());
         $I->assertCount(2, $ledger->getEntries());
         $I->assertSame(2, $credit2->getLine(), 'The line should have been set to the bottom');
+        $I->assertEquals(Money::USD(2999), $credit2->getRunningBalance());
     }
 }

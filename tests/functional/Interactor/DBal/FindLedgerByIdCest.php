@@ -27,12 +27,12 @@ class FindLedgerByIdCest
         }
         $this->findLedger = new FindLedgerById($this->connection);
         $ledgerData = [
-            'balance' => '{"amount":"500","currency":"USD"}',
+            'balance' => '{"amount":"1000","currency":"USD"}',
         ];
         $this->connection->insert('ledgers', $ledgerData);
         $entries = $this->entryData();
         foreach ($entries as $entryData) {
-            $this->connection->insert('ledger_entries', $entryData);
+             $this->connection->insert('ledger_entries', $entryData);
         }
     }
 
@@ -46,7 +46,7 @@ class FindLedgerByIdCest
     {
         return [
             [
-                'credit'           => '{"amount":"1000","currency":"USD"}',
+                'credit'           => '{"amount":"1500","currency":"USD"}',
                 'debit'            => null,
                 'date'             => '2018-10-19',
                 'description'      => 'Initial deposit',
@@ -54,6 +54,8 @@ class FindLedgerByIdCest
                 'ledger_id'        => '1',
                 'line'             => 1,
                 'reference_number' => '8675309',
+                'running_balance'  => '{"amount":"1500","currency":"USD"}',
+                'type'             => 'Deposit',
             ],
             [
                 'credit'           => null,
@@ -64,6 +66,8 @@ class FindLedgerByIdCest
                 'ledger_id'        => '1',
                 'line'             => 2,
                 'reference_number' => '828282',
+                'running_balance'  => '{"amount":"1000","currency":"USD"}',
+                'type'             => 'Cost',
             ],
         ];
     }
@@ -72,14 +76,15 @@ class FindLedgerByIdCest
     {
         $ledger = (new Ledger())
             ->setId(1)
-            ->setBalance(Money::USD(500));
+            ->setBalance(Money::USD(1000));
         $credit = (new Credit())
-            ->setCredit(Money::USD(1000))
+            ->setCredit(Money::USD(1500))
             ->setDate(new DateTime('2018-10-19'))
             ->setDescription('Initial deposit')
             ->setId(1)
             ->setLine(1)
-            ->setReferenceNumber('8675309');
+            ->setReferenceNumber('8675309')
+            ->setType('Deposit');
         $ledger->addEntry($credit);
         $debit = (new Debit())
             ->setDebit(Money::USD(500))
@@ -87,7 +92,8 @@ class FindLedgerByIdCest
             ->setDescription('Toothpicks')
             ->setId(2)
             ->setLine(2)
-            ->setReferenceNumber('828282');
+            ->setReferenceNumber('828282')
+            ->setType('Cost');
         $ledger->addEntry($debit);
 
         return $ledger;

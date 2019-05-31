@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace IamPersistent\Ledger\Entity;
 
 use DateTime;
+use Money\Money;
 
 abstract class Entry
 {
@@ -17,7 +18,9 @@ abstract class Entry
     protected $line;
     /** @var string */
     protected $referenceNumber;
-    /** @var string */
+    /** @var \Money\Money */
+    protected $runningBalance;
+    /** @var string|null */
     protected $type;
 
     public function getDate(): DateTime
@@ -80,12 +83,24 @@ abstract class Entry
         return $this;
     }
 
-    public function getType(): string
+    public function getRunningBalance(): Money
+    {
+        return $this->runningBalance;
+    }
+
+    public function setRunningBalance(Money $runningBalance): Entry
+    {
+        $this->runningBalance = $runningBalance;
+
+        return $this;
+    }
+
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type): Entry
+    public function setType(string $type = null): Entry
     {
         $this->type = $type;
 
