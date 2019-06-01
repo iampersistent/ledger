@@ -64,7 +64,7 @@ abstract class Entry
         return $this->line;
     }
 
-    public function setLine(int $line): Entry
+    public function setLine(?int $line): Entry
     {
         $this->line = $line;
 

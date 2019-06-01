@@ -26,6 +26,7 @@ class CalculateBalanceCest
         $calculateBalance->handle($ledger);
 
         $I->assertEquals(Money::USD(1000), $ledger->getBalance());
+        $I->assertEquals(Money::USD(1000), $entry->getRunningBalance());
 
         $entry = (new Debit())
             ->setDebit(Money::USD(500));
@@ -34,6 +35,7 @@ class CalculateBalanceCest
         $calculateBalance->handle($ledger);
 
         $I->assertEquals(Money::USD(500), $ledger->getBalance());
+        $I->assertEquals(Money::USD(500), $entry->getRunningBalance());
 
 
         $entry = (new Credit())
@@ -43,5 +45,6 @@ class CalculateBalanceCest
         $calculateBalance->handle($ledger);
 
         $I->assertEquals(Money::USD(862), $ledger->getBalance());
+        $I->assertEquals(Money::USD(862), $entry->getRunningBalance());
     }
 }

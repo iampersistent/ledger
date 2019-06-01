@@ -12,6 +12,5 @@ final class AddEntryToLedger
     {
         $ledger->addEntry($entry);
         (new CalculateBalance())->handle($ledger);
-        $entry->setRunningBalance($ledger->getBalance());
     }
 }

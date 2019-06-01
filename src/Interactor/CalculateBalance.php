@@ -20,6 +20,7 @@ final class CalculateBalance
             } else {
                 $balance = $balance->subtract($entry->getDebit());
             }
+            $entry->setRunningBalance($balance);
         }
 
         $ledger->setBalance($balance);
