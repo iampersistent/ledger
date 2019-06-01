@@ -28,8 +28,6 @@ final class SaveLedger implements SaveLedgerInterface
     {
         if (null === $ledger->getId()) {
             $this->insertLedger($ledger);
-        } else {
-            $this->mergePersistedLedger($ledger);
         }
 
         $entries = $ledger->getEntries();
@@ -56,16 +54,6 @@ final class SaveLedger implements SaveLedgerInterface
             $ledger->setId($id);
         } else {
 
-        }
-    }
-
-    private function mergePersistedLedger(Ledger $ledger)
-    {
-        $persistedLedger = $this->findLedgerById->find($ledger->getId());
-        $persistedEntries = $persistedLedger->getEntries();
-
-        foreach ($persistedEntries as $entry) {
-            $ledger->addEntry($entry);
         }
     }
 
