@@ -16,7 +16,7 @@ abstract class Entry
     protected $id;
     /** @var int */
     protected $line;
-    /** @var string */
+    /** @var string|null */
     protected $referenceNumber;
     /** @var \Money\Money */
     protected $runningBalance;
@@ -71,7 +71,7 @@ abstract class Entry
         return $this;
     }
 
-    public function getReferenceNumber(): string
+    public function getReferenceNumber(): ?string
     {
         return $this->referenceNumber;
     }
