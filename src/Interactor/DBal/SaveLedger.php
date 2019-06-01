@@ -14,14 +14,14 @@ final class SaveLedger implements SaveLedgerInterface
     private $connection;
     /** @var FindLedgerById */
     private $findLedgerById;
-    /** @var InsertLedgerEntry */
-    private $insertEntry;
+    /** @var SaveLedgerEntry */
+    private $saveEntry;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
         $this->findLedgerById = new FindLedgerById($connection);
-        $this->insertEntry = new InsertLedgerEntry($connection);
+        $this->saveEntry = new SaveLedgerEntry($connection);
     }
 
     public function save(Ledger $ledger): bool
@@ -32,9 +32,7 @@ final class SaveLedger implements SaveLedgerInterface
 
         $entries = $ledger->getEntries();
         foreach ($entries as $entry) {
-            if (null === $entry->getId()) {
-                $this->insertEntry->insert($ledger, $entry);
-            }
+            $this->saveEntry->save($ledger, $entry);
         }
 
         (new CalculateBalance)->handle($ledger);

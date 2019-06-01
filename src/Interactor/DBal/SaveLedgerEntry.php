@@ -7,7 +7,7 @@ use Doctrine\DBAL\Connection;
 use IamPersistent\Ledger\Entity\Entry;
 use IamPersistent\Ledger\Entity\Ledger;
 
-final class InsertLedgerEntry
+final class SaveLedgerEntry
 {
     private $connection;
 
@@ -16,7 +16,28 @@ final class InsertLedgerEntry
         $this->connection = $connection;
     }
 
+    public function save(Ledger $ledger, Entry $entry): bool
+    {
+        if (null === $entry->getId()) {
+            return $this->insert($ledger, $entry);
+        }
+
+        return $this->update($ledger, $entry);
+    }
+
     public function insert(Ledger $ledger, Entry $entry): bool
+    {
+        $data = $this->prepData($ledger, $entry);
+        $response = $this->connection->insert('ledger_entries', $data);
+        if (1 === $response) {
+            $id = $this->connection->lastInsertId();
+            $entry->setId($id);
+
+            return true;
+        }
+    }
+
+    private function prepData(Ledger $ledger, Entry $entry): array
     {
         $credit = null;
         $debit = null;
@@ -25,7 +46,8 @@ final class InsertLedgerEntry
         } else {
             $debit = (new MoneyToJson)($entry->getDebit());
         }
-        $data = [
+
+        return [
             'credit'           => $credit,
             'debit'            => $debit,
             'date'             => $entry->getDate()->format('Y-m-d'),
@@ -35,12 +57,19 @@ final class InsertLedgerEntry
             'reference_number' => $entry->getReferenceNumber(),
             'type'             => $entry->getType(),
         ];
-        $response = $this->connection->insert('ledger_entries', $data);
-        if (1 === $response) {
-            $id = $this->connection->lastInsertId();
-            $entry->setId($id);
+    }
 
-            return true;
+    public function update(Ledger $ledger, Entry $entry): bool
+    {
+        $data = $this->prepData($ledger, $entry);
+        $identifier = [
+            'id' => (int) $entry->getId(),
+        ];
+        $response = $this->connection->update('ledger_entries', $data, $identifier);
+        if (1 !== $response) {
+            return false;
         }
+
+        return true;
     }
 }

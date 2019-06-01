@@ -76,7 +76,7 @@ abstract class Entry
         return $this->referenceNumber;
     }
 
-    public function setReferenceNumber(string $referenceNumber): Entry
+    public function setReferenceNumber(?string $referenceNumber): Entry
     {
         $this->referenceNumber = $referenceNumber;
 
