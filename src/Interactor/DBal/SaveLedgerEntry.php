@@ -41,10 +41,11 @@ final class SaveLedgerEntry
     {
         $credit = null;
         $debit = null;
+        $moneyToJson = new MoneyToJson();
         if ($entry->isCredit()) {
-            $credit = (new MoneyToJson)($entry->getCredit());
+            $credit = $moneyToJson($entry->getCredit());
         } else {
-            $debit = (new MoneyToJson)($entry->getDebit());
+            $debit = $moneyToJson($entry->getDebit());
         }
 
         return [
@@ -55,6 +56,7 @@ final class SaveLedgerEntry
             'line'             => $entry->getLine(),
             'ledger_id'        => $ledger->getId(),
             'reference_number' => $entry->getReferenceNumber(),
+            'running_balance'  => $moneyToJson($entry->getRunningBalance()),
             'type'             => $entry->getType(),
         ];
     }

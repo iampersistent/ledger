@@ -37,7 +37,8 @@ final class FindLedgerById
 
     private function addEntries(Ledger $ledger)
     {
-        $sql = 'SELECT * FROM ledger_entries WHERE ledger_id = ' . $ledger->getId();
+        $sql = 'SELECT * FROM ledger_entries WHERE ledger_id = ' . $ledger->getId() .
+            ' ORDER BY line ASC';
         $statement = $this->connection->executeQuery($sql);
         $entries = $statement->fetchAll();
         foreach ($entries as $entry) {

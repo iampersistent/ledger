@@ -30,13 +30,13 @@ final class SaveLedger implements SaveLedgerInterface
             $this->insertLedger($ledger);
         }
 
+        (new CalculateBalance)->handle($ledger);
+        $this->updateLedger($ledger);
+
         $entries = $ledger->getEntries();
         foreach ($entries as $entry) {
             $this->saveEntry->save($ledger, $entry);
         }
-
-        (new CalculateBalance)->handle($ledger);
-        $this->updateLedger($ledger);
 
         return true;
     }
