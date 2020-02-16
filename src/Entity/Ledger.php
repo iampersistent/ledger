@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace IamPersistent\Ledger\Entity;
 
+use DateTime;
 use Money\Money;
 
 final class Ledger
@@ -44,6 +45,22 @@ final class Ledger
     public function getEntries(): array
     {
         return $this->entries;
+    }
+
+    /**
+     * @return Entry[]
+     */
+    public function getEntriesByDate(DateTime $dateTime): array
+    {
+        $date = $dateTime->format('Y-m-d');
+        $entries = [];
+        foreach ($this->entries as $entry) {
+            if ($date === $entry->getDate()->format('Y-m-d')) {
+                $entries[] = $entry;
+            }
+        }
+
+        return $entries;
     }
 
     public function getEntryByReferenceNumber(string $referenceNumber): ?Entry
