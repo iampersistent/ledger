@@ -9,6 +9,8 @@ use IamPersistent\Ledger\Entity\Credit;
 use IamPersistent\Ledger\Entity\Debit;
 use IamPersistent\Ledger\Entity\Entry;
 use IamPersistent\Ledger\Entity\Ledger;
+use Money\Currency;
+use Money\Money;
 
 final class FindLedgerById
 {
@@ -55,12 +57,19 @@ final class FindLedgerById
             $entry = (new Debit())
                 ->setDebit((new JsonToMoney)($data['debit']));
         }
+        if (empty($data['running_balance'])) {
+            $runningBalance = new Money(0, new Currency('USD'));
+        } else {
+            $runningBalance = (new JsonToMoney)($data['running_balance']);
+        }
         $entry
             ->setDate(new DateTime($data['date']))
             ->setDescription($data['description'])
             ->setId($data['id'])
             ->setLine((int) $data['line'])
             ->setReferenceNumber($data['reference_number'])
+//            ->setRunningBalance((new JsonToMoney)($data['running_balance']))
+            ->setRunningBalance($runningBalance)
             ->setType($data['type']);
 
         return $entry;
