@@ -67,8 +67,8 @@ final class FindLedgerById
             ->setDescription($data['description'])
             ->setId($data['id'])
             ->setLine((int) $data['line'])
+            ->setProductId($data['product_id'])
             ->setReferenceNumber($data['reference_number'])
-//            ->setRunningBalance((new JsonToMoney)($data['running_balance']))
             ->setRunningBalance($runningBalance)
             ->setType($data['type']);
 

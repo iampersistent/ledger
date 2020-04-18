@@ -16,6 +16,8 @@ abstract class Entry
     protected $id;
     /** @var int */
     protected $line;
+    /** @var mixed */
+    protected $productId;
     /** @var string|null */
     protected $referenceNumber;
     /** @var \Money\Money */
@@ -67,6 +69,18 @@ abstract class Entry
     public function setLine(?int $line): Entry
     {
         $this->line = $line;
+
+        return $this;
+    }
+
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    public function setProductId($productId): Entry
+    {
+        $this->productId = $productId;
 
         return $this;
     }

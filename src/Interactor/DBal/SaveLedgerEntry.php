@@ -55,6 +55,7 @@ final class SaveLedgerEntry
             'description'      => $entry->getDescription(),
             'line'             => $entry->getLine(),
             'ledger_id'        => $ledger->getId(),
+            'product_id'       => $entry->getProductId(),
             'reference_number' => $entry->getReferenceNumber(),
             'running_balance'  => $moneyToJson($entry->getRunningBalance()),
             'type'             => $entry->getType(),
