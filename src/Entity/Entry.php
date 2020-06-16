@@ -25,6 +25,15 @@ abstract class Entry
     /** @var string|null */
     protected $type;
 
+    public function getAmount(): Money
+    {
+        if ($this->isDebit()) {
+            return $this->getDebit()->multiply(-1);
+        }
+
+        return $this->getCredit();
+    }
+
     public function getDate(): DateTime
     {
         return $this->date;
