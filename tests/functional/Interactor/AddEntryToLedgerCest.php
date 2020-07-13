@@ -12,7 +12,28 @@ use Money\Money;
 
 class AddEntryToLedgerCest
 {
-    public function testHandle(FunctionalTester $I)
+    public function testNullLinePosition(FunctionalTester $I)
+    {
+        $addEntryToLedger = new AddEntryToLedger();
+        $ledger = (new Ledger())
+            ->setBalance(Money::USD(0));
+
+        $entry1 = (new Credit())
+            ->setCredit(Money::USD(500));
+
+        $addEntryToLedger->handle($ledger, $entry1);
+
+        $I->assertSame(1, $entry1->getLine());
+
+        $entry2 = (new Credit())
+            ->setCredit(Money::USD(500));
+        $entities[] = $entry2;
+        $addEntryToLedger->handle($ledger, $entry2);
+
+        $I->assertSame(2, $entry2->getLine());
+    }
+
+    public function testCalculations(FunctionalTester $I)
     {
         $addEntryToLedger = new AddEntryToLedger();
 

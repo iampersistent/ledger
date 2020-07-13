@@ -10,20 +10,6 @@ use UnitTester;
 
 class LedgerCest
 {
-    public function testAddEntry(UnitTester $I)
-    {
-        $entry1 = (new Credit());
-        $ledger = (new Ledger())
-            ->addEntry($entry1);
-
-        $I->assertSame(1, $entry1->getLine());
-
-        $entry2 = (new Credit());
-        $ledger->addEntry($entry2);
-
-        $I->assertSame(2, $entry2->getLine());
-    }
-
     public function testSetEntries(UnitTester $I)
     {
         $ledger = (new Ledger())

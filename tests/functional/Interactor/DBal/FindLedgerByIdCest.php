@@ -19,12 +19,15 @@ class FindLedgerByIdCest
     /** @var FindLedgerById */
     private $findLedger;
 
+    public function _after(FunctionalTester $I)
+    {
+        $I->closeDatabase();
+    }
+
     public function _before(FunctionalTester $I)
     {
-        if (!$this->connection) {
-            $this->connection = $I->getDBalConnection();
-            $I->setUpDatabase();
-        }
+        $this->connection = $I->getDBalConnection();
+        $I->setUpDatabase();
         $this->findLedger = new FindLedgerById($this->connection);
         $ledgerData = [
             'balance' => '{"amount":"1000","currency":"USD"}',
@@ -53,6 +56,7 @@ class FindLedgerByIdCest
                 'id'               => '1',
                 'ledger_id'        => '1',
                 'line'             => 1,
+                'product_id'       => 42,
                 'reference_number' => '8675309',
                 'running_balance'  => '{"amount":"1500","currency":"USD"}',
                 'type'             => 'Deposit',
@@ -65,6 +69,7 @@ class FindLedgerByIdCest
                 'id'               => '2',
                 'ledger_id'        => '1',
                 'line'             => 2,
+                'product_id'       => 43,
                 'reference_number' => '828282',
                 'running_balance'  => '{"amount":"1000","currency":"USD"}',
                 'type'             => 'Cost',
@@ -77,24 +82,27 @@ class FindLedgerByIdCest
         $ledger = (new Ledger())
             ->setId(1)
             ->setBalance(Money::USD(1000));
-        $credit = (new Credit())
+        $entries[] = (new Credit())
             ->setCredit(Money::USD(1500))
             ->setDate(new DateTime('2018-10-19'))
             ->setDescription('Initial deposit')
             ->setId(1)
             ->setLine(1)
+            ->setProductId(42)
             ->setReferenceNumber('8675309')
+            ->setRunningBalance(Money::USD(1500))
             ->setType('Deposit');
-        $ledger->addEntry($credit);
-        $debit = (new Debit())
+        $entries[] = (new Debit())
             ->setDebit(Money::USD(500))
             ->setDate(new DateTime('2018-10-20'))
             ->setDescription('Toothpicks')
             ->setId(2)
             ->setLine(2)
+            ->setProductId(43)
             ->setReferenceNumber('828282')
+            ->setRunningBalance(Money::USD(1000))
             ->setType('Cost');
-        $ledger->addEntry($debit);
+        $ledger->setEntries($entries);
 
         return $ledger;
     }

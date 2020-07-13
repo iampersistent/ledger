@@ -13,6 +13,7 @@ final class InsertEntryIntoPosition
         $entries = $this->getSortedEntries($ledger);
         $entry->setLine(null);
         array_splice($entries, $position-1, 0, [$entry]);
+        $this->resetLineNumbers($entries);
         $ledger->setEntries($entries);
 
         (new CalculateBalance)->handle($ledger);
@@ -27,5 +28,14 @@ final class InsertEntryIntoPosition
         }
 
         return $entries;
+    }
+
+    private function resetLineNumbers(array &$entries)
+    {
+        $lineNumber = 1;
+        foreach ($entries as $entry) {
+            $entry->setLine($lineNumber);
+            $lineNumber++;
+        }
     }
 }

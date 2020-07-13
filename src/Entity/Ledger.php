@@ -27,18 +27,6 @@ final class Ledger
         return $this;
     }
 
-    public function addEntry(Entry $entry): Ledger
-    {
-        if (null === $line = $entry->getLine()) {
-            $line = count($this->entries) + 1;
-            $entry->setLine($line);
-        }
-
-        $this->entries[$line] = $entry;
-
-        return $this;
-    }
-
     /**
      * @return Entry[]
      */
@@ -92,6 +80,13 @@ final class Ledger
     public function setId($id): Ledger
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    private function addEntry(Entry $entry): Ledger
+    {
+        $this->entries[$entry->getLine()] = $entry;
 
         return $this;
     }

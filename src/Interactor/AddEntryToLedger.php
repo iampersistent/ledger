@@ -10,7 +10,21 @@ final class AddEntryToLedger
 {
     public function handle(Ledger $ledger, Entry $entry)
     {
-        $ledger->addEntry($entry);
+        if (!$entry->getLine()) {
+            $this->setLineNumber($ledger, $entry);
+        }
+        $rc = new \ReflectionClass(Ledger::class);
+        $addEntry = $rc->getMethod('addEntry');
+        $addEntry->setAccessible(true);
+        $addEntry->invoke($ledger, $entry);
+
         (new CalculateBalance())->handle($ledger);
+    }
+
+    private function setLineNumber(Ledger $ledger, Entry $entry)
+    {
+        $totalEntries = count($ledger->getEntries());
+        $line = $totalEntries + 1;
+        $entry->setLine($line);
     }
 }

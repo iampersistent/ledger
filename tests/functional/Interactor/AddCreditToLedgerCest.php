@@ -18,7 +18,8 @@ class AddCreditToLedgerCest
         $ledger = (new Ledger())
             ->setBalance(Money::USD(0));
         $credit1 = (new Credit())
-            ->setCredit(Money::USD(1999));
+            ->setCredit(Money::USD(1999))
+            ->setLine(1);
 
         $addCreditToLedger->handle($ledger, $credit1);
 
@@ -28,7 +29,8 @@ class AddCreditToLedgerCest
         $I->assertEquals(Money::USD(1999), $credit1->getRunningBalance());
 
         $credit2 = (new Credit())
-            ->setCredit(Money::USD(1000));
+            ->setCredit(Money::USD(1000))
+            ->setLine(2);
         $addCreditToLedger->handle($ledger, $credit2);
 
         $I->assertEquals(Money::USD(2999), $ledger->getBalance());

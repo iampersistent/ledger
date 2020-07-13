@@ -19,12 +19,15 @@ final class SaveLedgerCest
     /** @var SaveLedger */
     private $saveLedger;
 
+    public function _after(FunctionalTester $I)
+    {
+        $I->closeDatabase();
+    }
+
     public function _before(FunctionalTester $I)
     {
-        if (!$this->connection) {
-            $this->connection = $I->getDBalConnection();
-            $I->setUpDatabase();
-        }
+        $this->connection = $I->getDBalConnection();
+        $I->setUpDatabase();
         $this->saveLedger = new SaveLedger($this->connection);
     }
 
@@ -40,31 +43,33 @@ final class SaveLedgerCest
     /**
      * @depends testNewLedger
      */
-    public function testAddEntries(FunctionalTester $I)
+    public function testSetEntries(FunctionalTester $I)
     {
         $credit = (new Credit())
             ->setCredit(Money::USD(1000))
             ->setDate(new DateTime('2018-10-19'))
             ->setDescription('Initial deposit')
-            ->setReferenceNumber('8675309');
+            ->setLine(1)
+            ->setProductId(42)
+            ->setReferenceNumber('8675309')
+            ->setType('Deposit');
         $ledger = (new Ledger())
-            ->addEntry($credit)
+            ->setEntries([$credit])
             ->setBalance(Money::USD(0));
         $this->saveLedger->save($ledger);
-
         $I->assertEquals(Money::USD(1000), $ledger->getBalance());
         $ledgerData = $this->connection->fetchAll('SELECT * FROM ledgers');
         $I->assertEquals($this->expectedLedgerWithEntryData(), $ledgerData);
-
         $debit = (new Debit())
             ->setDebit(Money::USD(500))
             ->setDate(new DateTime('2018-10-20'))
             ->setDescription('Toothpicks')
-            ->setReferenceNumber('828282');
-        $ledger
-            ->addEntry($debit);
+            ->setLine(2)
+            ->setProductId(43)
+            ->setReferenceNumber('828282')
+            ->setType('Cost');
+        $ledger->setEntries([$credit, $debit]);
         $this->saveLedger->save($ledger);
-
         $I->assertEquals(Money::USD(500), $ledger->getBalance());
         $ledgerData = $this->connection->fetchAll('SELECT * FROM ledgers');
         $entryData = $this->connection->fetchAll('SELECT * FROM ledger_entries');
@@ -82,10 +87,11 @@ final class SaveLedgerCest
                 'description'      => 'Initial deposit',
                 'id'               => '1',
                 'line'             => '1',
-                'ledger_id'        => '2',
+                'ledger_id'        => '1',
                 'reference_number' => '8675309',
-                'running_balance'  => null,
-                'type'             => null,
+                'running_balance'  => '{"amount":1000,"currency":"USD"}',
+                'type'             => 'Deposit',
+                'product_id'       => '42',
             ],
             [
                 'credit'           => null,
@@ -94,10 +100,11 @@ final class SaveLedgerCest
                 'description'      => 'Toothpicks',
                 'id'               => '2',
                 'line'             => '2',
-                'ledger_id'        => '2',
+                'ledger_id'        => '1',
                 'reference_number' => '828282',
-                'running_balance'  => null,
-                'type'             => null,
+                'running_balance'  => '{"amount":500,"currency":"USD"}',
+                'type'             => 'Cost',
+                'product_id'       => '43',
             ],
         ];
     }
@@ -116,12 +123,8 @@ final class SaveLedgerCest
     {
         return [
             [
-                'balance' => '{"amount":0,"currency":"USD"}',
-                'id'      => '1',
-            ],
-            [
                 'balance' => '{"amount":1000,"currency":"USD"}',
-                'id'      => '2',
+                'id'      => '1',
             ],
         ];
     }
@@ -130,12 +133,8 @@ final class SaveLedgerCest
     {
         return [
             [
-                'balance' => '{"amount":0,"currency":"USD"}',
-                'id'      => '1',
-            ],
-            [
                 'balance' => '{"amount":500,"currency":"USD"}',
-                'id'      => '2',
+                'id'      => '1',
             ],
         ];
     }

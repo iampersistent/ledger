@@ -42,10 +42,12 @@ final class FindLedgerById
         $sql = 'SELECT * FROM ledger_entries WHERE ledger_id = ' . $ledger->getId() .
             ' ORDER BY line ASC';
         $statement = $this->connection->executeQuery($sql);
-        $entries = $statement->fetchAll();
-        foreach ($entries as $entry) {
-            $ledger->addEntry($this->createEntry($entry));
+        $entryData = $statement->fetchAll();
+        $entries = [];
+        foreach ($entryData as $datum) {
+            $entries[] = ($this->createEntry($datum));
         }
+        $ledger->setEntries($entries);
     }
 
     private function createEntry(array $data): Entry

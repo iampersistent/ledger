@@ -18,7 +18,8 @@ class AddDebitToLedgerCest
         $ledger = (new Ledger())
             ->setBalance(Money::USD(0));
         $debit1 = (new Debit())
-            ->setDebit(Money::USD(1999));
+            ->setDebit(Money::USD(1999))
+            ->setLine(1);
 
         $addDebitToLedger->handle($ledger, $debit1);
 
@@ -28,7 +29,8 @@ class AddDebitToLedgerCest
         $I->assertEquals(Money::USD(-1999), $debit1->getRunningBalance());
 
         $debit2 = (new Debit())
-            ->setDebit(Money::USD(1000));
+            ->setDebit(Money::USD(1000))
+            ->setLine(2);
         $addDebitToLedger->handle($ledger, $debit2);
 
         $I->assertEquals(Money::USD(-2999), $ledger->getBalance());

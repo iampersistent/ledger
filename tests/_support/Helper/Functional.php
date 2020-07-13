@@ -18,6 +18,13 @@ class Functional extends \Codeception\Module
     /** @var PDO */
     private $pdo;
 
+    public function closeDatabase()
+    {
+        $this->connection->close();
+        $this->connection = null;
+        $this->pdo = null;
+    }
+
     public function setUpDatabase()
     {
         $configFile = __DIR__ . '/../../../phinx.yml';

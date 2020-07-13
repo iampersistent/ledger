@@ -19,32 +19,36 @@ class CalculateBalanceCest
         $ledger = (new Ledger())
             ->setBalance(Money::USD(0));
 
-        $entry = (new Credit())
-            ->setCredit(Money::USD(1000));
-        $ledger->addEntry($entry);
+        $entry1 = (new Credit())
+            ->setCredit(Money::USD(1000))
+            ->setLine(1);
+        $entries[] = $entry1;
+        $ledger->setEntries($entries);
 
         $calculateBalance->handle($ledger);
 
         $I->assertEquals(Money::USD(1000), $ledger->getBalance());
-        $I->assertEquals(Money::USD(1000), $entry->getRunningBalance());
+        $I->assertEquals(Money::USD(1000), $entry1->getRunningBalance());
 
-        $entry = (new Debit())
-            ->setDebit(Money::USD(500));
-        $ledger->addEntry($entry);
+        $entry2 = (new Debit())
+            ->setDebit(Money::USD(500))
+            ->setLine(2);
+        $entries[] = $entry2;
+        $ledger->setEntries($entries);
 
         $calculateBalance->handle($ledger);
 
         $I->assertEquals(Money::USD(500), $ledger->getBalance());
-        $I->assertEquals(Money::USD(500), $entry->getRunningBalance());
+        $I->assertEquals(Money::USD(500), $entry2->getRunningBalance());
 
-
-        $entry = (new Credit())
-            ->setCredit(Money::USD(362));
-        $ledger->addEntry($entry);
-
+        $entry3 = (new Credit())
+            ->setCredit(Money::USD(362))
+            ->setLine(3);
+        $entries[] = $entry3;
+        $ledger->setEntries($entries);
         $calculateBalance->handle($ledger);
 
         $I->assertEquals(Money::USD(862), $ledger->getBalance());
-        $I->assertEquals(Money::USD(862), $entry->getRunningBalance());
+        $I->assertEquals(Money::USD(862), $entry3->getRunningBalance());
     }
 }
