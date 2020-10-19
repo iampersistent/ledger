@@ -5,6 +5,7 @@ namespace IamPersistent\Ledger\Interactor\DBal;
 
 use Doctrine\DBAL\Connection;
 use IamPersistent\Ledger\Entity\Entry;
+use IamPersistent\Ledger\Entity\Item;
 use IamPersistent\Ledger\Entity\Ledger;
 
 final class SaveLedgerEntry
@@ -33,8 +34,22 @@ final class SaveLedgerEntry
             $id = $this->connection->lastInsertId();
             $entry->setId($id);
 
-            return true;
+            return $this->insertItems($entry);
         }
+
+        return false;
+    }
+
+    private function insertItems(Entry $entry): bool
+    {
+        foreach ($entry->getItems() as $item) {
+            $data = $this->prepItemData($entry, $item);
+            $response = $this->connection->insert('ledger_items', $data);
+            $id = $this->connection->lastInsertId();
+            $item->setId($id);
+        }
+
+        return true;
     }
 
     private function prepData(Ledger $ledger, Entry $entry): array
@@ -62,11 +77,26 @@ final class SaveLedgerEntry
         ];
     }
 
+    private function prepItemData(Entry $entry, Item $item): array
+    {
+        $moneyToJson = new MoneyToJson();
+
+        return [
+            'amount'           => $moneyToJson($item->getAmount()),
+            'description'      => $item->getDescription(),
+            'entry_id'         => $entry->getId(),
+            'product_id'       => $item->getProductId(),
+            'reference_number' => $item->getReferenceNumber(),
+            'taxes'            => $moneyToJson($item->getTaxes()),
+            'total'            => $moneyToJson($item->getTotal()),
+        ];
+    }
+
     public function update(Ledger $ledger, Entry $entry): bool
     {
         $data = $this->prepData($ledger, $entry);
         $identifier = [
-            'id' => (int) $entry->getId(),
+            'id' => (int)$entry->getId(),
         ];
         $response = $this->connection->update('ledger_entries', $data, $identifier);
         if (1 !== $response) {

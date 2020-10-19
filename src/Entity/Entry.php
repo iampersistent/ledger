@@ -14,6 +14,8 @@ abstract class Entry
     protected $description;
     /** @var mixed */
     protected $id;
+    /** @var \IamPersistent\Ledger\Entity\Item[] */
+    protected $items = [];
     /** @var int */
     protected $line;
     /** @var mixed */
@@ -66,6 +68,25 @@ abstract class Entry
     public function setId($id): Entry
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function addItem(Item $item): Entry
+    {
+        $this->items[] = $item;
+
+        return $this;
+    }
+
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    public function setItems(array $items): Entry
+    {
+        $this->items = $items;
 
         return $this;
     }
