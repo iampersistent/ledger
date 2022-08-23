@@ -5,9 +5,9 @@
     "keywords": ["ledger"],
     "license": "MIT",
     "require": {
-        "moneyphp/money": "^3.0@dev",
-        "php": ">=7.2",
-        "psr/container": "^1.0@dev"
+        "moneyphp/money": "^4.0.5",
+        "php": "^8.0",
+        "psr/container": "^1.1.2"
     },
     "require-dev": {
         "codeception/codeception": "^2.5",
