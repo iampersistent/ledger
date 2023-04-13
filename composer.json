@@ -6,15 +6,15 @@
     "license": "MIT",
     "require": {
         "moneyphp/money": "^4.0.5",
-        "php": "^8.0",
-        "psr/container": "^1.1.2"
+        "php": "^8.1",
+        "psr/container": "^1.1.2 || ^2.0"
     },
     "require-dev": {
         "codeception/codeception": "^2.5",
         "doctrine/dbal": "^2.9@dev",
         "ext-pdo": "*",
         "ext-json": "*",
-        "robmorgan/phinx": "dev-master"
+        "robmorgan/phinx": "^1.0"
     },
     "repositories": {
     },
