@@ -5,7 +5,7 @@ namespace IamPersistent\Ledger\Entity;
 
 use Money\Money;
 
-final class Item
+class Item
 {
     /** @var \Money\Money */
     protected $amount;

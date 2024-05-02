@@ -5,7 +5,7 @@ namespace IamPersistent\Ledger\Entity;
 
 use Money\Money;
 
-final class Debit extends Entry
+class Debit extends Entry
 {
     /** @var Money */
     protected $debit;

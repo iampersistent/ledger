@@ -6,7 +6,7 @@ namespace IamPersistent\Ledger\Entity;
 use DateTime;
 use Money\Money;
 
-final class Ledger
+class Ledger
 {
     /** @var Money */
     private $balance;
