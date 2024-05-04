@@ -12,8 +12,8 @@ class SaveLedger implements SaveLedgerInterface
 {
     public function __construct(
         protected Connection $connection,
-        private FindLedgerById $findLedgerById,
-        private SaveLedgerEntry $saveEntry,
+        protected FindLedgerById $findLedgerById,
+        protected SaveLedgerEntry $saveEntry,
     ) {}
 
     public function save(Ledger $ledger): bool
