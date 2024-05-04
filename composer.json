@@ -16,8 +16,6 @@
         "ext-json": "*",
         "robmorgan/phinx": "^0.15.4"
     },
-    "repositories": {
-    },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {

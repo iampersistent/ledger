@@ -8,21 +8,13 @@ use IamPersistent\Ledger\Entity\Ledger;
 use IamPersistent\Ledger\Interactor\CalculateBalance;
 use IamPersistent\Ledger\Interactor\SaveLedgerInterface;
 
-final class SaveLedger implements SaveLedgerInterface
+class SaveLedger implements SaveLedgerInterface
 {
-    /** @var Connection */
-    private $connection;
-    /** @var FindLedgerById */
-    private $findLedgerById;
-    /** @var SaveLedgerEntry */
-    private $saveEntry;
-
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-        $this->findLedgerById = new FindLedgerById($connection);
-        $this->saveEntry = new SaveLedgerEntry($connection);
-    }
+    public function __construct(
+        protected Connection $connection,
+        private FindLedgerById $findLedgerById,
+        private SaveLedgerEntry $saveEntry,
+    ) {}
 
     public function save(Ledger $ledger): bool
     {
@@ -41,7 +33,7 @@ final class SaveLedger implements SaveLedgerInterface
         return true;
     }
 
-    private function insertLedger(Ledger $ledger)
+    protected function insertLedger(Ledger $ledger)
     {
         $data = [
             'balance' => (new MoneyToJson)($ledger->getBalance()),
@@ -55,7 +47,7 @@ final class SaveLedger implements SaveLedgerInterface
         }
     }
 
-    private function updateLedger(Ledger $ledger)
+    protected function updateLedger(Ledger $ledger)
     {
         $data = [
             'balance' => (new MoneyToJson)($ledger->getBalance()),

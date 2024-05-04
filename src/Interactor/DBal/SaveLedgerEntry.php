@@ -8,7 +8,7 @@ use IamPersistent\Ledger\Entity\Entry;
 use IamPersistent\Ledger\Entity\Item;
 use IamPersistent\Ledger\Entity\Ledger;
 
-final class SaveLedgerEntry
+class SaveLedgerEntry
 {
     private $connection;
 
@@ -40,19 +40,21 @@ final class SaveLedgerEntry
         return false;
     }
 
-    private function insertItems(Entry $entry): bool
+    public function update(Ledger $ledger, Entry $entry): bool
     {
-        foreach ($entry->getItems() as $item) {
-            $data = $this->prepItemData($entry, $item);
-            $response = $this->connection->insert('ledger_items', $data);
-            $id = $this->connection->lastInsertId();
-            $item->setId($id);
+        $data = $this->prepData($ledger, $entry);
+        $identifier = [
+            'id' => (int)$entry->getId(),
+        ];
+        $response = $this->connection->update('ledger_entries', $data, $identifier);
+        if (1 !== $response) {
+            return false;
         }
 
         return true;
     }
 
-    private function prepData(Ledger $ledger, Entry $entry): array
+    protected function prepData(Ledger $ledger, Entry $entry): array
     {
         $credit = null;
         $debit = null;
@@ -77,7 +79,7 @@ final class SaveLedgerEntry
         ];
     }
 
-    private function prepItemData(Entry $entry, Item $item): array
+    protected function prepItemData(Entry $entry, Item $item): array
     {
         $moneyToJson = new MoneyToJson();
 
@@ -92,15 +94,13 @@ final class SaveLedgerEntry
         ];
     }
 
-    public function update(Ledger $ledger, Entry $entry): bool
+    private function insertItems(Entry $entry): bool
     {
-        $data = $this->prepData($ledger, $entry);
-        $identifier = [
-            'id' => (int)$entry->getId(),
-        ];
-        $response = $this->connection->update('ledger_entries', $data, $identifier);
-        if (1 !== $response) {
-            return false;
+        foreach ($entry->getItems() as $item) {
+            $data = $this->prepItemData($entry, $item);
+            $response = $this->connection->insert('ledger_items', $data);
+            $id = $this->connection->lastInsertId();
+            $item->setId($id);
         }
 
         return true;
