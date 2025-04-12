@@ -38,7 +38,7 @@ final class CreatePostgresLedgerItemsTable extends AbstractMigration
                 taxes ? 'amount' AND 
                 taxes ? 'currency' AND 
                 jsonb_typeof(taxes->'amount') = 'number' AND 
-                jsonb_typeof(taxes->'currency') = 'string' )
+                jsonb_typeof(taxes->'currency') = 'string'
             )
         "); 
 
