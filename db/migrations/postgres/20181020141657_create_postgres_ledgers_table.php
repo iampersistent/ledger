@@ -7,9 +7,7 @@ class CreatePostgresLedgersTable extends AbstractMigration
     public function change()
     {
         $this->table('ledgers')
-            ->addColumn('balance', 'jsonb', ['null' => false])
-            ->addColumn('name', 'string', ['limit' => 255, 'null' => false])
-            ->addColumn('description', 'text', ['null' => true])
+            ->addColumn('balance', 'jsonb', ['default' => '{"amount": 0, "currency": "USD"}'])
             ->addTimestamps()
             ->create();
 
