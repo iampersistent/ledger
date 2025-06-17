@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
 final class CreatePostgresLedgerItemsTable extends AbstractMigration
 {
-    public function change(): void
+    public function up(): void
     {
         $this->table('ledger_items')
             ->addColumn('amount', 'jsonb', ['null' => true])
@@ -23,35 +24,35 @@ final class CreatePostgresLedgerItemsTable extends AbstractMigration
         $this->execute("
             ALTER TABLE ledger_items
             ADD CONSTRAINT amount_format_check
-            CHECK ( 
-                amount ? 'amount' AND 
-                amount ? 'currency' AND 
-                jsonb_typeof(amount->'amount') = 'number' AND 
-                jsonb_typeof(amount->'currency') = 'string' 
+            CHECK (
+                amount ? 'amount' AND
+                amount ? 'currency' AND
+                jsonb_typeof(amount->'amount') = 'number' AND
+                jsonb_typeof(amount->'currency') = 'string'
             )
-        "); 
+        ");
 
         $this->execute("
             ALTER TABLE ledger_items
             ADD CONSTRAINT taxes_format_check
-            CHECK ( 
-                taxes ? 'amount' AND 
-                taxes ? 'currency' AND 
-                jsonb_typeof(taxes->'amount') = 'number' AND 
+            CHECK (
+                taxes ? 'amount' AND
+                taxes ? 'currency' AND
+                jsonb_typeof(taxes->'amount') = 'number' AND
                 jsonb_typeof(taxes->'currency') = 'string'
             )
-        "); 
+        ");
 
         $this->execute("
             ALTER TABLE ledger_items
             ADD CONSTRAINT total_format_check
-            CHECK ( 
-                total ? 'amount' AND 
-                total ? 'currency' AND 
-                jsonb_typeof(total->'amount') = 'number' AND 
-                jsonb_typeof(total->'currency') = 'string' 
+            CHECK (
+                total ? 'amount' AND
+                total ? 'currency' AND
+                jsonb_typeof(total->'amount') = 'number' AND
+                jsonb_typeof(total->'currency') = 'string'
             )
-        "); 
+        ");
 
         $schema = $this->getAdapter()->getOption('schema');
         $this->execute("
@@ -70,5 +71,10 @@ final class CreatePostgresLedgerItemsTable extends AbstractMigration
             FOR EACH ROW
             EXECUTE FUNCTION {$schema}.update_timestamp();
         ");
+    }
+
+    public function down(): void
+    {
+        $this->table('ledger_items')->drop()->save();
     }
 }

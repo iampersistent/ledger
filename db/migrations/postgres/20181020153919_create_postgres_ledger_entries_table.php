@@ -5,7 +5,7 @@ use Phinx\Migration\AbstractMigration;
 
 class CreatePostgresLedgerEntriesTable extends AbstractMigration
 {
-    public function change()
+    public function up()
     {
         $this->table('ledger_entries')
             ->addColumn('credit', 'jsonb', ['null' => true])
@@ -47,14 +47,14 @@ class CreatePostgresLedgerEntriesTable extends AbstractMigration
         $this->execute("
             ALTER TABLE ledger_entries
             ADD CONSTRAINT running_balance_format_check
-            CHECK ( 
+            CHECK (
                 running_balance ? 'amount' AND
                 running_balance ? 'currency' AND
                 jsonb_typeof(running_balance->'amount') = 'number' AND
                 jsonb_typeof(running_balance->'currency') = 'string'
             )
         ");
-        
+
         $schema = $this->getAdapter()->getOption('schema');
         $this->execute("
             CREATE OR REPLACE FUNCTION {$schema}.update_timestamp()
@@ -72,5 +72,10 @@ class CreatePostgresLedgerEntriesTable extends AbstractMigration
             FOR EACH ROW
             EXECUTE FUNCTION {$schema}.update_timestamp();
         ");
+    }
+
+    public function down()
+    {
+        $this->table('ledger_entries')->drop()->save();
     }
 }

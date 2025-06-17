@@ -4,7 +4,7 @@ use Phinx\Migration\AbstractMigration;
 
 class CreatePostgresLedgersTable extends AbstractMigration
 {
-    public function change()
+    public function up()
     {
         $this->table('ledgers')
             ->addColumn('balance', 'jsonb', ['default' => '{"amount": 0, "currency": "USD"}'])
@@ -39,5 +39,10 @@ class CreatePostgresLedgersTable extends AbstractMigration
             FOR EACH ROW
             EXECUTE FUNCTION {$schema}.update_timestamp();
         ");
+    }
+
+    public function down()
+    {
+        $this->table('ledgers')->drop()->save();
     }
 }
